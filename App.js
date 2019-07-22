@@ -8,6 +8,9 @@ import {
   createMaterialTopTabNavigator,
   createStackNavigator
 } from "react-navigation";
+import reducer from "./reducers";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
 
 const router = {
   DeckList: {
@@ -58,9 +61,11 @@ const MainNavigator = createAppContainer(
 
 export default function App() {
   return (
-    <View style={{ flex: 1 }}>
-      <MainNavigator />
-    </View>
+    <Provider store={createStore(reducer)}>
+      <View style={{ flex: 1 }}>
+        <MainNavigator />
+      </View>
+    </Provider>
   );
 }
 

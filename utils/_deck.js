@@ -35,5 +35,5 @@ function setDummyData() {
 }
 
 export function fetchDeckResults(results) {
-  return results === null ? setDummyData() : results;
+  return results === null ? setDummyData() : JSON.parse(results);
 }
