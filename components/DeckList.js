@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { receiveDecks } from "../actions";
-import { View, Text, StyleSheet } from "react-native";
-import { white } from "../utils/colors";
+import { View, Text, StyleSheet, Platform } from "react-native";
+import { white, lightGray } from "../utils/colors";
 import { getDecks } from "../utils/api";
+import IndividualDeck from "./IndividualDeck";
 
 class DeckList extends Component {
   componentDidMount() {
@@ -16,8 +17,9 @@ class DeckList extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Deck List View</Text>
-        <Text>{JSON.stringify(decks)}</Text>
+        {Object.keys(decks).map(deckTitle => (
+          <IndividualDeck deck={decks[deckTitle]} key={deckTitle} />
+        ))}
       </View>
     );
   }
@@ -25,12 +27,12 @@ class DeckList extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 30,
-    marginRight: 30,
-    backgroundColor: white,
+    flex: Platform.OS === "ios" ? null : 1,
+    flexDirection: "column",
+    backgroundColor: Platform.OS === "ios" ? white : lightGray,
+    marginTop: Platform.OS === "ios" ? 20 : 0,
+    marginLeft: Platform.OS === "ios" ? 30 : 0,
+    marginRight: Platform.OS === "ios" ? 30 : 0,
     padding: 15
   }
 });
