@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Platform } from "react-native";
 import DeckList from "./components/DeckList";
 import NewDeck from "./components/NewDeck";
+import { white, lightGray } from "./utils/colors";
 import {
   createBottomTabNavigator,
   createAppContainer,
@@ -59,21 +60,24 @@ const MainNavigator = createAppContainer(
   })
 );
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Platform.OS === "ios" ? white : lightGray
+  }
+});
+
 export default function App() {
   return (
     <Provider store={createStore(reducer)}>
-      <View style={{ flex: 1 }}>
+      <View
+        style={{
+          backgroundColor: Platform.OS === "ios" ? white : lightGray,
+          flex: 1
+        }}
+      >
         <MainNavigator />
       </View>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
