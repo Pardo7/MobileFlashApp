@@ -2,13 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { white } from "../utils/colors";
 
-function IndividualDeck(props) {
-  const { title, questions } = props.deck;
+function IndividualDeck({ navigation }, props) {
+  const { deck, title } = navigation.state.params;
 
   return (
     <View style={styles.card}>
       <Text style={styles.text}>{title}</Text>
-      <Text>{questions.length} cards</Text>
+      <Text>{deck.questions.length} cards</Text>
     </View>
   );
 }
