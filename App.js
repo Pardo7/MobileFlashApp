@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Platform } from "react-native";
 import DeckList from "./components/DeckList";
 import NewDeck from "./components/NewDeck";
 import IndividualDeck from "./components/IndividualDeck";
+import NewQuestion from "./components/NewQuestion";
 import { white, lightGray } from "./utils/colors";
 import {
   createBottomTabNavigator,
@@ -60,6 +61,9 @@ const MainNavigator = createAppContainer(
     },
     IndividualDeck: {
       screen: IndividualDeck
+    },
+    NewQuestion: {
+      screen: NewQuestion
     }
   })
 );

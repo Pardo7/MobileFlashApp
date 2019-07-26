@@ -1,14 +1,38 @@
 import React from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
-import { white } from "../utils/colors";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableOpacity
+} from "react-native";
+import { connect } from "react-redux";
+import { white, blue } from "../utils/colors";
 
-function IndividualDeck({ navigation }, props) {
-  const { deck, title } = navigation.state.params;
+function IndividualDeck(props) {
+  const { deck, navigation } = props;
 
   return (
     <View style={styles.card}>
-      <Text style={styles.text}>{title}</Text>
+      <Text style={styles.text}>{deck.title}</Text>
       <Text>{deck.questions.length} cards</Text>
+
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("NewQuestion", {
+              title: deck.title
+            });
+          }}
+          style={
+            Platform.OS === "ios"
+              ? styles.iosSubmitBtn
+              : styles.androidSubmitBtn
+          }
+        >
+          <Text style={styles.submitBtnText}>Add Card</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -39,7 +63,39 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 5
+  },
+  iosSubmitBtn: {
+    backgroundColor: blue,
+    padding: 10,
+    borderRadius: 7,
+    height: 45,
+    marginLeft: 40,
+    marginRight: 40
+  },
+  androidSubmitBtn: {
+    backgroundColor: blue,
+    padding: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    height: 45,
+    borderRadius: 2,
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  submitBtnText: {
+    color: white,
+    fontSize: 22,
+    textAlign: "center"
   }
 });
 
-export default IndividualDeck;
+function mapStateToProps(decks, { navigation }) {
+  const { title } = navigation.state.params;
+  return {
+    deck: decks[title],
+    navigation
+  };
+}
+
+export default connect(mapStateToProps)(IndividualDeck);
