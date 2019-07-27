@@ -4,6 +4,7 @@ import DeckList from "./components/DeckList";
 import NewDeck from "./components/NewDeck";
 import IndividualDeck from "./components/IndividualDeck";
 import NewQuestion from "./components/NewQuestion";
+import QuizView from "./components/QuizView";
 import { white, lightGray } from "./utils/colors";
 import {
   createBottomTabNavigator,
@@ -64,6 +65,9 @@ const MainNavigator = createAppContainer(
     },
     NewQuestion: {
       screen: NewQuestion
+    },
+    QuizView: {
+      screen: QuizView
     }
   })
 );

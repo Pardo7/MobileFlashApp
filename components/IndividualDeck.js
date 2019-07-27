@@ -32,6 +32,19 @@ function IndividualDeck(props) {
         >
           <Text style={styles.submitBtnText}>Add Card</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("QuizView", { deck });
+          }}
+          style={
+            Platform.OS === "ios"
+              ? styles.iosSubmitBtn
+              : styles.androidSubmitBtn
+          }
+        >
+          <Text style={styles.submitBtnText}>Start Quiz</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -62,7 +75,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20
   },
   text: {
-    marginBottom: 5
+    marginBottom: 5,
+    fontSize: 25
   },
   iosSubmitBtn: {
     backgroundColor: blue,
@@ -70,7 +84,8 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     height: 45,
     marginLeft: 40,
-    marginRight: 40
+    marginRight: 40,
+    marginTop: 40
   },
   androidSubmitBtn: {
     backgroundColor: blue,
@@ -79,6 +94,7 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     height: 45,
     borderRadius: 2,
+    marginTop: 40,
     alignSelf: "flex-end",
     justifyContent: "center",
     alignItems: "center"
