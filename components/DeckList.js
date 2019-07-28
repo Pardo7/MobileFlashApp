@@ -6,7 +6,8 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList
 } from "react-native";
 import { white, lightGray } from "../utils/colors";
 import { getDecks } from "../utils/api";
@@ -17,33 +18,37 @@ class DeckList extends Component {
     getDecks().then(decks => dispatch(receiveDecks(decks)));
   }
 
-  renderDeck = (deck, title) => (
-    <View key={title}>
-      <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate("IndividualDeck", {
-            deck: deck,
-            title: title
-          });
-        }}
-      >
-        <View style={styles.card}>
-          <Text style={styles.text}>{title}</Text>
-          <Text>{deck.questions.length} cards</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+  renderDeck = ({ item }) => {
+    if (Object.keys(item).length == 0) return;
+
+    const decks = item;
+    return Object.keys(decks).map(deck => (
+      <View key={deck} style={styles.container}>
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.navigate("IndividualDeck", {
+              deck: decks[deck],
+              title: decks[deck].title
+            });
+          }}
+        >
+          <View style={styles.card}>
+            <Text style={styles.text}>{decks[deck].title}</Text>
+            <Text>{decks[deck].questions.length} cards</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    ));
+  };
 
   render() {
     const { decks } = this.props;
-
     return (
-      <View style={styles.container}>
-        {Object.keys(decks).map(deckTitle =>
-          this.renderDeck(decks[deckTitle], deckTitle)
-        )}
-      </View>
+      <FlatList
+        data={[decks]}
+        renderItem={this.renderDeck}
+        keyExtractor={(item, index) => index.toString()}
+      />
     );
   }
 }
