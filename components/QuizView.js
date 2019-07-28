@@ -6,7 +6,6 @@ import {
   Platform,
   TouchableOpacity
 } from "react-native";
-import { connect } from "react-redux";
 import FlipCard from "react-native-flip-card";
 import { white, blue, lightGray } from "../utils/colors";
 
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
     height: 45,
     marginLeft: 40,
     marginRight: 40,
-    marginTop: 80
+    marginTop: 40
   },
   androidSubmitBtn: {
     backgroundColor: blue,
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 80
+    marginTop: 40
   },
   submitBtnText: {
     color: white,
@@ -155,4 +154,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect()(QuizView);
+export default QuizView;
