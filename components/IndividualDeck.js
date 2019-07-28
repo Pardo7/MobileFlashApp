@@ -35,6 +35,8 @@ function IndividualDeck(props) {
 
         <TouchableOpacity
           onPress={() => {
+            if (deck.questions.length == 0) return;
+
             navigation.navigate("QuizView", { deck });
           }}
           style={

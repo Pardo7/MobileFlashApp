@@ -73,6 +73,9 @@ class QuizView extends Component {
           clickable={false}
         >
           <View style={styles.card}>
+            <Text style={styles.cardsLeftText}>
+              {deck.questions.length - questionIndex} / {deck.questions.length}
+            </Text>
             <Text style={styles.text}>
               {deck.questions[questionIndex].question}
             </Text>
@@ -112,6 +115,10 @@ const styles = StyleSheet.create({
   text: {
     marginBottom: 5,
     fontSize: 25
+  },
+  cardsLeftText: {
+    alignSelf: "flex-start",
+    fontSize: 15
   },
   container: {
     flex: 1,
