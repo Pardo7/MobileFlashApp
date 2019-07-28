@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
-import { white, blue } from "../utils/colors";
+import FlipCard from "react-native-flip-card";
+import { white, blue, lightGray } from "../utils/colors";
 
 function ActionButton({ onPress, actionText }) {
   return (
@@ -25,6 +26,7 @@ function ActionButton({ onPress, actionText }) {
 class QuizView extends Component {
   state = {
     viewAnswer: false,
+    flip: false,
     questionIndex: 0,
     numCorrect: null,
     numIncorrect: null
@@ -32,8 +34,30 @@ class QuizView extends Component {
 
   recordResponse = responseId => {
     if (responseId == 0)
-      this.setState(({ viewAnswer }) => ({ viewAnswer: !viewAnswer }));
+      this.setState(({ viewAnswer, flip }) => ({
+        viewAnswer: !viewAnswer,
+        flip: !flip
+      }));
   };
+
+  renderActionButtons(viewAnswer) {
+    return (
+      <Fragment>
+        <ActionButton
+          onPress={() => this.recordResponse(0)}
+          actionText={viewAnswer ? "Question" : "Answer"}
+        />
+        <ActionButton
+          onPress={() => this.recordResponse(1)}
+          actionText="Correct"
+        />
+        <ActionButton
+          onPress={() => this.recordResponse(2)}
+          actionText="Incorrect"
+        />
+      </Fragment>
+    );
+  }
 
   render() {
     const { deck } = this.props.navigation.state.params;
@@ -41,32 +65,27 @@ class QuizView extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.card}>
-          {!viewAnswer && (
+        <FlipCard
+          friction={10}
+          perspective={1000}
+          flipHorizontal={true}
+          flipVertical={false}
+          flip={this.state.flip}
+          clickable={false}
+        >
+          <View style={styles.card}>
             <Text style={styles.text}>
               {deck.questions[questionIndex].question}
             </Text>
-          )}
-
-          {viewAnswer && ( 
+            {this.renderActionButtons(viewAnswer)}
+          </View>
+          <View style={styles.card}>
             <Text style={styles.text}>
               {deck.questions[questionIndex].answer}
             </Text>
-          )}
-
-          <ActionButton
-            onPress={() => this.recordResponse(0)}
-            actionText={viewAnswer ? "Question" : "Answer"}
-          />
-          <ActionButton
-            onPress={() => this.recordResponse(1)}
-            actionText="Correct"
-          />
-          <ActionButton
-            onPress={() => this.recordResponse(2)}
-            actionText="Incorrect"
-          />
-        </View>
+            {this.renderActionButtons(viewAnswer)}
+          </View>
+        </FlipCard>
       </View>
     );
   }
@@ -79,8 +98,8 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     backgroundColor: white,
     borderRadius: 16,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 30,
+    marginRight: 30,
     marginTop: 27,
     padding: 30,
     shadowRadius: 3,
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
     fontSize: 25
   },
   container: {
-    flex: Platform.OS === "ios" ? null : 1,
+    flex: 1,
     flexDirection: "column",
     backgroundColor: Platform.OS === "ios" ? white : lightGray
   },
@@ -107,7 +126,7 @@ const styles = StyleSheet.create({
     height: 45,
     marginLeft: 40,
     marginRight: 40,
-    marginTop: 40
+    marginTop: 80
   },
   androidSubmitBtn: {
     backgroundColor: blue,
@@ -118,7 +137,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40
+    marginTop: 80
   },
   submitBtnText: {
     color: white,
