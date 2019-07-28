@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { white, lightGray } from "../utils/colors";
 import { getDecks } from "../utils/api";
-import IndividualDeck from "./IndividualDeck";
 
 class DeckList extends Component {
   componentDidMount() {
