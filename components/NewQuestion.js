@@ -38,6 +38,10 @@ class NewQuestion extends Component {
   submit = () => {
     const { title } = this.props.navigation.state.params;
     const { questionText, questionAnswer, questionIsTrue } = this.state;
+
+    if (questionText === "" || questionAnswer === "" || questionIsTrue === null)
+      return;
+
     const cardEntry = {
       question: questionText,
       answer: questionAnswer,
@@ -72,7 +76,6 @@ class NewQuestion extends Component {
   };
 
   handleChange = (fieldId, text) => {
-    console.log(fieldId, text);
     if (fieldId == 1) this.setState({ questionText: text });
     if (fieldId == 2) this.setState({ questionAnswer: text });
   };

@@ -31,6 +31,8 @@ class NewDeck extends Component {
   submitDeck = () => {
     const { dispatch } = this.props;
     const { deckTitle } = this.state;
+    if (deckTitle === "") return;
+
     dispatch(addDeck(deckTitle));
 
     this.setState(({ deckTitle }) => ({
