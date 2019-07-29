@@ -21,21 +21,21 @@ Following are steps to run a local instance of the application.
 1. Clone this repository.
 
 ```
-git clone
+git clone https://github.com/Pardo7/MobileFlashApp.git
 ```
 
 2. Navigate into `/` root directory of project using `cd mobileFlashApp`
 3. Install the dependencies via NPM & start the server. Simply,
 
 ```
-npm install && npm start
+npm install && expo start
 ```
 
 or
 
 ```
 yarn install
-yarn start
+expo start
 ```
 
 4. Scan the QR Code rendered within the terminal.
