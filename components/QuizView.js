@@ -27,23 +27,108 @@ class QuizView extends Component {
     viewAnswer: false,
     flip: false,
     questionIndex: 0,
-    numCorrect: null,
-    numIncorrect: null
+    numCorrect: 0,
+    renderStats: false
+  };
+
+  goHome = title => {
+    this.props.navigation.navigate("IndividualDeck", {
+      title: title
+    });
+  };
+
+  restartQuiz = () => {
+    this.setState(() => ({
+      questionIndex: 0,
+      numCorrect: 0,
+      renderStats: false
+    }));
+  };
+
+  computeAnswer = answer => {
+    const { deck } = this.props.navigation.state.params;
+    const { questionIndex } = this.state;
+
+    if (answer == deck.questions[questionIndex].isTrue)
+      this.setState(({ numCorrect }) => ({ numCorrect: ++numCorrect }));
+  };
+
+  computeCardIndex = deck => {
+    const nextIndex = this.state.questionIndex + 1;
+
+    this.setState(({ questionIndex }) => ({
+      questionIndex:
+        nextIndex !== deck.questions.length ? nextIndex : questionIndex,
+      renderStats: nextIndex == deck.questions.length ? true : false
+    }));
+  };
+
+  toggleAnswer = () => {
+    this.setState(({ viewAnswer, flip }) => ({
+      viewAnswer: !viewAnswer,
+      flip: !flip
+    }));
   };
 
   recordResponse = responseId => {
-    if (responseId == 0)
-      this.setState(({ viewAnswer, flip }) => ({
-        viewAnswer: !viewAnswer,
-        flip: !flip
-      }));
+    if (responseId == 1 || responseId == 2) {
+      const { deck } = this.props.navigation.state.params;
+      const answer = responseId == 1 ? true : false;
+      const toggledAnswer = this.state.viewAnswer;
+
+      if (toggledAnswer) this.toggleAnswer();
+      this.computeCardIndex(deck);
+      this.computeAnswer(answer);
+    }
   };
 
-  renderActionButtons(viewAnswer) {
+  renderStatsView = () => {
+    const { deck } = this.props.navigation.state.params;
+    return (
+      <View style={styles.card}>
+        <Text>
+          You've Answered {this.state.numCorrect} correct out of {""}
+          {deck.questions.length}
+        </Text>
+        <TouchableOpacity
+          onPress={() => this.goHome(deck.title)}
+          style={
+            Platform.OS === "ios"
+              ? styles.iosSubmitBtn
+              : styles.androidSubmitBtn
+          }
+        >
+          <Text style={styles.submitBtnText}>Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={this.restartQuiz}
+          style={
+            Platform.OS === "ios"
+              ? styles.iosSubmitBtn
+              : styles.androidSubmitBtn
+          }
+        >
+          <Text style={styles.submitBtnText}>Restart</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  renderScore = () => {
+    const { deck } = this.props.navigation.state.params;
+
+    return (
+      <Text style={styles.cardsLeftText}>
+        {this.state.questionIndex + 1} / {deck.questions.length}
+      </Text>
+    );
+  };
+
+  renderActionButtons = viewAnswer => {
     return (
       <Fragment>
         <ActionButton
-          onPress={() => this.recordResponse(0)}
+          onPress={this.toggleAnswer}
           actionText={viewAnswer ? "Question" : "Answer"}
         />
         <ActionButton
@@ -56,38 +141,41 @@ class QuizView extends Component {
         />
       </Fragment>
     );
-  }
+  };
 
   render() {
     const { deck } = this.props.navigation.state.params;
-    const { questionIndex, viewAnswer } = this.state;
+    const { questionIndex, viewAnswer, renderStats, flip } = this.state;
 
     return (
       <View style={styles.container}>
-        <FlipCard
-          friction={10}
-          perspective={1000}
-          flipHorizontal={true}
-          flipVertical={false}
-          flip={this.state.flip}
-          clickable={false}
-        >
-          <View style={styles.card}>
-            <Text style={styles.cardsLeftText}>
-              {deck.questions.length - questionIndex} / {deck.questions.length}
-            </Text>
-            <Text style={styles.text}>
-              {deck.questions[questionIndex].question}
-            </Text>
-            {this.renderActionButtons(viewAnswer)}
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.text}>
-              {deck.questions[questionIndex].answer}
-            </Text>
-            {this.renderActionButtons(viewAnswer)}
-          </View>
-        </FlipCard>
+        {renderStats ? (
+          this.renderStatsView()
+        ) : (
+          <FlipCard
+            friction={10}
+            perspective={1000}
+            flipHorizontal={true}
+            flipVertical={false}
+            flip={flip}
+            clickable={false}
+          >
+            <View style={styles.card}>
+              {this.renderScore()}
+              <Text style={styles.text}>
+                {deck.questions[questionIndex].question}
+              </Text>
+              {this.renderActionButtons(viewAnswer)}
+            </View>
+            <View style={styles.card}>
+              {this.renderScore()}
+              <Text style={styles.text}>
+                {deck.questions[questionIndex].answer}
+              </Text>
+              {this.renderActionButtons(viewAnswer)}
+            </View>
+          </FlipCard>
+        )}
       </View>
     );
   }

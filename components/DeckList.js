@@ -27,7 +27,6 @@ class DeckList extends Component {
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("IndividualDeck", {
-              deck: decks[deck],
               title: decks[deck].title
             });
           }}

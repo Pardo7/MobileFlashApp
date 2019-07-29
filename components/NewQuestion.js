@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import {
   View,
   Text,
+  Button,
   StyleSheet,
   Platform,
   TextInput,
   TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
-import { white, blue, lightGray } from "../utils/colors";
+import { white, blue, lightGray, darkBlue, orange } from "../utils/colors";
 import { addCard } from "../actions/index";
 import { addCardToDeck } from "../utils/api";
 
@@ -28,27 +29,46 @@ function SubmitBtn({ onPress }) {
 class NewQuestion extends Component {
   state = {
     questionText: "",
-    questionAnswer: ""
+    questionAnswer: "",
+    questionIsTrue: null,
+    buttonOneStateColor: blue,
+    buttonTwoStateColor: blue
   };
 
   submit = () => {
-    // pass deck title view navigation props
     const { title } = this.props.navigation.state.params;
-    const { questionText, questionAnswer } = this.state;
+    const { questionText, questionAnswer, questionIsTrue } = this.state;
     const cardEntry = {
       question: questionText,
-      answer: questionAnswer
+      answer: questionAnswer,
+      isTrue: questionIsTrue
     };
 
-    // // Update Redux
     this.props.dispatch(addCard(title, cardEntry));
 
     this.setState(() => ({
       questionText: "",
-      questionAnswer: ""
+      questionAnswer: "",
+      questionIsTrue: null,
+      buttonOneStateColor: blue,
+      buttonTwoStateColor: blue
     }));
 
     addCardToDeck(title, cardEntry);
+  };
+
+  toggleButtonColorState = (answer = false) => {
+    answer
+      ? this.setState({
+          buttonOneStateColor: orange,
+          buttonTwoStateColor: blue,
+          questionIsTrue: true
+        })
+      : this.setState({
+          buttonTwoStateColor: orange,
+          buttonOneStateColor: blue,
+          questionIsTrue: false
+        });
   };
 
   handleChange = (fieldId, text) => {
@@ -73,6 +93,31 @@ class NewQuestion extends Component {
             value={this.state.questionAnswer}
             onChangeText={text => this.handleChange(2, text)}
           />
+
+          <View style={styles.containerTwo}>
+            <TouchableOpacity
+              onPress={() => this.toggleButtonColorState(true)}
+              style={[
+                Platform.OS === "ios"
+                  ? styles.iosSubmitBtn
+                  : styles.androidSubmitBtn,
+                { backgroundColor: this.state.buttonOneStateColor }
+              ]}
+            >
+              <Text style={styles.submitBtnText}>True</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.toggleButtonColorState()}
+              style={[
+                Platform.OS === "ios"
+                  ? styles.iosSubmitBtn
+                  : styles.androidSubmitBtn,
+                { backgroundColor: this.state.buttonTwoStateColor }
+              ]}
+            >
+              <Text style={styles.submitBtnText}>False</Text>
+            </TouchableOpacity>
+          </View>
 
           <SubmitBtn onPress={this.submit} />
         </View>
@@ -105,8 +150,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: Platform.OS === "ios" ? white : lightGray
   },
+  containerTwo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 30
+  },
   iosSubmitBtn: {
-    backgroundColor: blue,
+    backgroundColor: darkBlue,
     padding: 10,
     borderRadius: 7,
     height: 45,
@@ -114,7 +164,7 @@ const styles = StyleSheet.create({
     marginRight: 40
   },
   androidSubmitBtn: {
-    backgroundColor: blue,
+    backgroundColor: darkBlue,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,

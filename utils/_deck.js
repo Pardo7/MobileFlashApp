@@ -9,11 +9,13 @@ function setDummyData() {
       questions: [
         {
           question: "What is React?",
-          answer: "A library for managing user interfaces"
+          answer: "A library for managing user interfaces",
+          isTrue: true
         },
         {
           question: "Where do you make Ajax requests in React?",
-          answer: "The componentDidMount lifecycle event"
+          answer: "The componentDidMount lifecycle event",
+          isTrue: true
         }
       ]
     },
@@ -23,7 +25,8 @@ function setDummyData() {
         {
           question: "What is a closure?",
           answer:
-            "The combination of a function and the lexical environment within which that function was declared."
+            "The combination of a function and the lexical environment within which that function was declared.",
+          isTrue: true
         }
       ]
     }
