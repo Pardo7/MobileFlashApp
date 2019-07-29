@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import FlipCard from "react-native-flip-card";
 import { white, blue, lightGray } from "../utils/colors";
+import { clearLocalNotification, setLocalNotification } from "../utils/helpers";
 
 function ActionButton({ onPress, actionText }) {
   return (
@@ -83,7 +84,9 @@ class QuizView extends Component {
   };
 
   renderStatsView = () => {
+    clearLocalNotification().then(setLocalNotification);
     const { deck } = this.props.navigation.state.params;
+
     return (
       <View style={styles.card}>
         <Text>
