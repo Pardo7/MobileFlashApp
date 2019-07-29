@@ -2,7 +2,7 @@
 
 Flash Cards is a flash card application that allows you to take quizzes, daily, on a variety of topics set by you.
 
-You may create decks, add questions, trivia, factual tidbits you'd like to work on comitting to memory
+You may create decks, add questions, factual tidbits you'd like to work on in comitting to memory
 
 Built with React Native and redux.
 
